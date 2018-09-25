@@ -4,10 +4,10 @@ using UnityEngine;
 
 public enum EDoneness  {
 
-	RAW,
-    RARE,
-    MEDIUM,
-    WELLDONE,
-    OVERCOOKED,
-    WASTED,
+	RAW = 0,
+    RARE = 1,
+    MEDIUM = 2,
+    WELLDONE = 3,
+    OVERCOOKED = 4,
+    WASTED = 5,
 }

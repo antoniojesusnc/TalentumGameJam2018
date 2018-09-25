@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class GUIEspetoPreview : MonoBehaviour, IBeginDragHandler , IEndDragHandler, IDragHandler
+public class GUIFoodTracker : MonoBehaviour, IBeginDragHandler , IEndDragHandler, IDragHandler
 {
 
     public Transform _espetoParent;
@@ -36,7 +36,7 @@ public class GUIEspetoPreview : MonoBehaviour, IBeginDragHandler , IEndDragHandl
 
     public void OnDrag(PointerEventData eventData)
     {
-        _movingEspeto.transform.position = eventData.position;
+        _movingEspeto.transform.position = eventData.position + _movingEspeto.Offset;
     }
 
 }

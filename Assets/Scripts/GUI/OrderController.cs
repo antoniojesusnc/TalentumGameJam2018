@@ -2,13 +2,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class OrderController : MonoBehaviour {
-
+public class OrderController : MonoBehaviour
+{
+    [Header("Control vars")]
     public int _amount;
     public EDoneness _doneness;
 
-	public void SetProperties(int amount, EDoneness doneness)
+    [Header("GUI")]
+    public TMPro.TextMeshProUGUI _amountText;
+    public Image _image;
+
+    public void SetProperties(int amount, EDoneness doneness)
     {
         _amount = amount;
         _doneness = doneness;
@@ -16,10 +22,13 @@ public class OrderController : MonoBehaviour {
 
     public void AddFish(EspetoController espeto)
     {
-        if(espeto.Doneness == _doneness)
+        if (_amount <= 0)
+            return;
+
+        if (espeto.Doneness == _doneness)
         {
             --_amount;
-            if(_amount <= 0)
+            if (_amount <= 0)
             {
                 Finish();
             }
@@ -36,7 +45,8 @@ public class OrderController : MonoBehaviour {
 
     private void UpdateGUI()
     {
-        Debug.Log("OrderController UpdateGUI");
+        _amountText.text = _amount.ToString();
+        //_image.sprite = 
     }
 
     private void Finish()
