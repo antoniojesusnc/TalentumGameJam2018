@@ -9,20 +9,32 @@ public class GUIOrderController : MonoBehaviour
     [Header("Control vars")]
     public int _amount;
     public EDoneness _doneness;
+    public float _duration;
 
     [Header("GUI")]
-    public TMPro.TextMeshProUGUI _amountText;
-    public Image _image;
+    [SerializeField]
+    TMPro.TextMeshProUGUI _amountText;
+    [SerializeField]
+    Image _image;
+    [SerializeField]
+    Image _bar;
+
+    float _timeStamp;
+    bool _starting;
+    bool _finish;
 
     private void Awake()
     {
-        SetProperties(_amount, _doneness);
+        SetProperties(_amount, _doneness, _duration);
     }
 
-    public void SetProperties(int amount, EDoneness doneness)
+    public void SetProperties(int amount, EDoneness doneness, float duration)
     {
         _amount = amount;
         _doneness = doneness;
+        _duration = duration;
+        _timeStamp = _duration;
+
         UpdateGUI();
     }
 
@@ -36,7 +48,7 @@ public class GUIOrderController : MonoBehaviour
             --_amount;
             if (_amount <= 0)
             {
-                Finish();
+                FinishEspeto();
             }
             else
             {
@@ -49,14 +61,43 @@ public class GUIOrderController : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (_starting || _finish)
+            return;
+
+        _timeStamp -= Time.deltaTime;
+        UpdateGUIBar();
+    }
+
+    private void UpdateGUIBar()
+    {
+        _bar.fillAmount = Mathf.Lerp(0, 1, _timeStamp / _duration);
+        if(_timeStamp <= 0)
+        {
+            FinishTime();
+        }
+    }
+
     private void UpdateGUI()
     {
         _amountText.text = _amount.ToString();
         _image.sprite = GameManager.Instance.GetImage(_doneness);
+
+        UpdateGUIBar();
     }
 
-    private void Finish()
+
+    void FinishTime()
     {
-        Debug.Log("OrderController Finish");
+        _finish = true;
+        Debug.Log("OrderController FinishTime");
+
+    }
+
+    void FinishEspeto()
+    {
+        _finish = true;
+        Debug.Log("OrderController FinishEspeto");
     }
 }
