@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class OrderController : MonoBehaviour
+public class GUIOrderController : MonoBehaviour
 {
     [Header("Control vars")]
     public int _amount;
@@ -14,13 +14,19 @@ public class OrderController : MonoBehaviour
     public TMPro.TextMeshProUGUI _amountText;
     public Image _image;
 
+    private void Awake()
+    {
+        SetProperties(_amount, _doneness);
+    }
+
     public void SetProperties(int amount, EDoneness doneness)
     {
         _amount = amount;
         _doneness = doneness;
+        UpdateGUI();
     }
 
-    public void AddFish(EspetoController espeto)
+    public void AddEspeto(EspetoController espeto)
     {
         if (_amount <= 0)
             return;
@@ -46,7 +52,7 @@ public class OrderController : MonoBehaviour
     private void UpdateGUI()
     {
         _amountText.text = _amount.ToString();
-        //_image.sprite = 
+        _image.sprite = GameManager.Instance.GetImage(_doneness);
     }
 
     private void Finish()

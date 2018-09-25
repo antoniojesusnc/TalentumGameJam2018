@@ -10,4 +10,5 @@ public enum EDoneness  {
     WELLDONE = 3,
     OVERCOOKED = 4,
     WASTED = 5,
+    Size = 6,
 }

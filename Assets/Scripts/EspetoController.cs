@@ -7,6 +7,13 @@ using UnityEngine.EventSystems;
 
 public class EspetoController : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
+    public const int MaxSort = 1080;
+    public const string KeyDropArea = "DropArea";
+
+    [Header("Image")]
+    [SerializeField]
+    Image _image;
+
     [Header("GUI Offset")]
     [SerializeField]
     Vector2 _offset;
@@ -32,16 +39,23 @@ public class EspetoController : MonoBehaviour, IBeginDragHandler, IEndDragHandle
     bool _finished;
 
     Vector3 _originalPosition;
-
+    GameManager _gameManager;
+    EDoneness _newDoneness;
 
     [Header("Fish Status")]
     [SerializeField]
     float _donenessIncrement;
+    [SerializeField]
+    float _totalIncrement;
+
+
 
     void Awake()
     {
+        _gameManager = GameManager.Instance;
+
         _beingCreated = true;
-        GetComponent<GraphicRaycaster>().enabled = false;
+        GameManager.Instance.SetAllEspetoRayCast(false);
     }
 
     void Start()
@@ -52,19 +66,60 @@ public class EspetoController : MonoBehaviour, IBeginDragHandler, IEndDragHandle
     public void Setted()
     {
         _beingCreated = false;
-        GetComponent<GraphicRaycaster>().enabled = true;
+        GameManager.Instance.SetAllEspetoRayCast(true);
         SetSpeedIncrement();
+
+        GetComponentInChildren<Canvas>().sortingOrder = MaxSort - (int)transform.position.y;
     }
 
     void SetSpeedIncrement()
     {
+        _donenessIncrement = GameManager.Instance.GetIncrementValue(this);
+    }
+
+    void FinishPlaceInOrder(GUIOrderController orderController)
+    {
+        _finished = true;
+        orderController.AddEspeto(this);
+        Destroy(gameObject);
+    }
+
+    void FinishThrowToTrash(GUITrashController trash)
+    {
+        _finished = true;
+        trash.AddEspeto(this);
+        Destroy(gameObject);
+    }
+
+    void FinishWasted()
+    {
 
     }
 
-    void PlaceInOrder(OrderController orderController)
+    void Update()
     {
-        orderController.AddFish(this);
-        Destroy(gameObject);
+        if (_beingCreated || _finished)
+            return;
+
+        _totalIncrement += Time.deltaTime * _donenessIncrement;
+
+        _newDoneness = _gameManager.GetDoneness(_totalIncrement);
+        if (_newDoneness != Doneness)
+        {
+            UpdateDoneness(_newDoneness);
+        }
+    }
+
+    private void UpdateDoneness(EDoneness newDoneness)
+    {
+        _doneness = newDoneness;
+
+        _image.sprite = _gameManager.GetImage(_doneness);
+
+        if(_doneness == EDoneness.Size)
+        {
+            FinishWasted();
+        }
     }
 
     //////////////////
@@ -72,7 +127,8 @@ public class EspetoController : MonoBehaviour, IBeginDragHandler, IEndDragHandle
     //////////////////
     public void OnBeginDrag(PointerEventData eventData)
     {
-        GetComponent<GraphicRaycaster>().enabled = false;
+        GameManager.Instance.SetAllEspetoRayCast(false);
+    
         _originalPosition = transform.position;
     }
 
@@ -82,16 +138,25 @@ public class EspetoController : MonoBehaviour, IBeginDragHandler, IEndDragHandle
     }
     public void OnEndDrag(PointerEventData eventData)
     {
-        OrderController orderController = null;
+        GUIOrderController orderController = null;
         if (eventData.pointerEnter != null)
-            orderController = eventData.pointerEnter.GetComponent<OrderController>();
+            orderController = eventData.pointerEnter.GetComponent<GUIOrderController>();
 
-        if (eventData.pointerEnter.name == "Boat" ||
+        GUITrashController trashController = null;
+        if (eventData.pointerEnter != null && orderController == null)
+            trashController = eventData.pointerEnter.GetComponent<GUITrashController>();
+
+        if (eventData.pointerEnter.name == KeyDropArea ||
+            trashController != null||
              orderController != null)
         {
             if (orderController != null)
             {
-                PlaceInOrder(orderController);
+                FinishPlaceInOrder(orderController);
+            }
+            else if (trashController != null)
+            {
+                FinishThrowToTrash(trashController);
             }
         }
         else

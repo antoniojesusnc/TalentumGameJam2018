@@ -23,7 +23,7 @@ public class GUIFoodTracker : MonoBehaviour, IBeginDragHandler , IEndDragHandler
     }
     public void OnEndDrag(PointerEventData eventData)
     {
-        if(eventData.pointerEnter.name == "Boat")
+        if(eventData.pointerEnter.name == EspetoController.KeyDropArea)
         {
             _movingEspeto.Setted();
         }
