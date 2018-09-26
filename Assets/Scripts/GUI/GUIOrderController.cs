@@ -91,7 +91,8 @@ public class GUIOrderController : MonoBehaviour
     void FinishTime()
     {
         _finish = true;
-        Debug.Log("OrderController FinishTime");
+
+        GameManager.Instance.TakeLife();
 
     }
 
