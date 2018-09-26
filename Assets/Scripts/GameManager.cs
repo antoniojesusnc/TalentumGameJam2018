@@ -55,6 +55,9 @@ public class GameManager : Singleton<GameManager>
     [SerializeField]
     float _alphaWhenDragging;
 
+    [Header("GameOver")]
+    public GameObject _guIGameOver;
+
     public CanvasGroup DropAreaCanvas
     {
         get
@@ -106,7 +109,7 @@ public class GameManager : Singleton<GameManager>
 
     private void FinishGame()
     {
-        Debug.Log("GameFinished");
+        _guIGameOver.GetComponent<GUIGameOver>().GameOver();
     }
 
     public void GetOrderProperties(out int amount, out EDoneness doneness, out float duration)
