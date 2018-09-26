@@ -12,9 +12,14 @@ public class GUIOrdersController : MonoBehaviour
 
     void Start()
     {
+        for (int i = 0; i < _orders.Count; ++i)
+        {
+            _orders[i].SetGUIOrdersController(this);
+        }
+
         SetInitialValues();
 
-        //InvokeRepeating("CheckIncreaseNumOrders",1,1);
+        InvokeRepeating("CheckIncreaseNumOrders",1,1);
     }
 
     private void SetInitialValues()
@@ -51,7 +56,7 @@ public class GUIOrdersController : MonoBehaviour
     void CheckIncreaseNumOrders()
     {
         int newOrderAmount = GameManager.Instance.GetOrderAmount();
-        if (_currentOrderAmounts <= newOrderAmount)
+        if (_currentOrderAmounts < newOrderAmount)
         {
             _currentOrderAmounts = newOrderAmount;
             _orders[_currentOrderAmounts - 1].Disable = false;

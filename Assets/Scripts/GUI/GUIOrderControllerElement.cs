@@ -14,6 +14,14 @@ public class GUIOrderControllerElement : MonoBehaviour
     [Header("GUI")]
     [SerializeField]
     TMPro.TextMeshProUGUI _amountText;
+
+    GUIOrdersController _gUIOrdersController;
+
+    public void SetGUIOrdersController(GUIOrdersController gUIOrdersController)
+    {
+        _gUIOrdersController = gUIOrdersController;
+    }
+
     [SerializeField]
     Image _image;
     [SerializeField]
@@ -26,7 +34,8 @@ public class GUIOrderControllerElement : MonoBehaviour
 
     private void Awake()
     {
-        
+        Disable = true;
+        gameObject.SetActive(false);
     }
 
     public void SetProperties(int amount, EDoneness doneness, float duration)
@@ -42,6 +51,7 @@ public class GUIOrderControllerElement : MonoBehaviour
     internal void StartAnim()
     {
         Disable = false;
+        _finish = false;
         gameObject.SetActive(true);
     }
 
@@ -102,7 +112,7 @@ public class GUIOrderControllerElement : MonoBehaviour
         GameManager.Instance.TakeLife();
         gameObject.SetActive(false);
 
-        GetComponent<GUIOrdersController>().FinishOrder(this);
+        _gUIOrdersController.FinishOrder(this);
     }
 
     void FinishEspeto()
@@ -111,6 +121,6 @@ public class GUIOrderControllerElement : MonoBehaviour
         Debug.Log("OrderController FinishEspeto");
         gameObject.SetActive(false);
 
-        GetComponent<GUIOrdersController>().FinishOrder(this);
+        _gUIOrdersController.FinishOrder(this);
     }
 }
