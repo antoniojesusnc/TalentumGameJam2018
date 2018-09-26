@@ -48,7 +48,7 @@ public class GUIOrderControllerElement : MonoBehaviour
         UpdateGUI();
     }
 
-    internal void StartAnim()
+    public void StartAnim()
     {
         Disable = false;
         _finish = false;
@@ -122,5 +122,6 @@ public class GUIOrderControllerElement : MonoBehaviour
         gameObject.SetActive(false);
 
         _gUIOrdersController.FinishOrder(this);
+        GameManager.Instance.AddPoints();
     }
 }

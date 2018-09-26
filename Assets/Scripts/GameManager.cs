@@ -52,17 +52,44 @@ public class GameManager : Singleton<GameManager>
     float _farValue;
     [SerializeField]
     RectTransform _dropArea;
+    [SerializeField]
+    float _alphaWhenDragging;
+
+    public CanvasGroup DropAreaCanvas
+    {
+        get
+        {
+            return _dropArea.GetComponent<CanvasGroup>();
+        }
+    }
     float _dropAreaTopPos;
+
+    [Header("Points")]
+    [SerializeField]
+    int _pointsPerTable;
+    int _currentPoints;
+    int _bestPoints;
 
 
     public delegate void DelegateOnUpdateLifes(int currentLifes);
     public event DelegateOnUpdateLifes OnUpdateLifes;
+
+    public delegate void DelegateChangePoints(int currentPoints);
+    public event DelegateChangePoints OnChangePoints;
 
     // Use this for initialization
     void Start()
     {
         _dropAreaTopPos = _dropArea.transform.position.y - 0.5f * _dropArea.sizeDelta.y * _dropArea.lossyScale.y;
         _currentLifes = _totalLifes;
+    }
+
+
+    public void AddPoints()
+    {
+        _currentPoints += GetOrderAmount() * _pointsPerTable;
+        if (OnChangePoints != null)
+            OnChangePoints(_currentPoints);
     }
 
     public void TakeLife()
@@ -84,7 +111,7 @@ public class GameManager : Singleton<GameManager>
 
     public void GetOrderProperties(out int amount, out EDoneness doneness, out float duration)
     {
-        doneness = (EDoneness)UnityEngine.Random.Range(1, 4);
+        doneness = (EDoneness)UnityEngine.Random.Range(1, 6);
 
         int incrementByTime = Mathf.FloorToInt( Time.timeSinceLevelLoad / _incrementOneAllAtTime);
         amount = UnityEngine.Random.Range(_minOrderAmount + incrementByTime, _maxOrderAmount + incrementByTime);
@@ -117,6 +144,8 @@ public class GameManager : Singleton<GameManager>
 
     public void SetAllEspetoRayCast(bool enable)
     {
+        DropAreaCanvas.alpha = enable?0:_alphaWhenDragging;
+
         var list = GameObject.FindObjectsOfType<EspetoController>();
         for (int i = list.Length - 1; i >= 0; --i)
         {

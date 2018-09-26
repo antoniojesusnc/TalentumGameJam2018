@@ -8,6 +8,7 @@ public class GUIFoodTracker : MonoBehaviour, IBeginDragHandler , IEndDragHandler
 
     public Transform _espetoParent;
     public EspetoController _espetoPrefab;
+    public CanvasGroup _dropArea;
 
     EspetoController _movingEspeto;
 
@@ -20,10 +21,12 @@ public class GUIFoodTracker : MonoBehaviour, IBeginDragHandler , IEndDragHandler
     public void OnBeginDrag(PointerEventData eventData)
     {
         CreateEspeto(eventData.position);
+        _dropArea.alpha = 0.2f;
     }
     public void OnEndDrag(PointerEventData eventData)
     {
-        if(eventData.pointerEnter.name == EspetoController.KeyDropArea)
+        _dropArea.alpha = 0;
+        if (eventData.pointerEnter.name == EspetoController.KeyDropArea)
         {
             _movingEspeto.Setted();
         }

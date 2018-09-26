@@ -139,6 +139,7 @@ public class EspetoController : MonoBehaviour, IBeginDragHandler, IEndDragHandle
         GameManager.Instance.SetAllEspetoRayCast(false);
 
         _originalPosition = transform.position;
+
     }
 
     public void OnDrag(PointerEventData eventData)
