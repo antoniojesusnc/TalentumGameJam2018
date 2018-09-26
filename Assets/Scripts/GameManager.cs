@@ -6,6 +6,22 @@ using UnityEngine.UI;
 
 public class GameManager : Singleton<GameManager>
 {
+    [Header("Orders")]
+    [SerializeField]
+    int _minOrderAmount;
+    [SerializeField]
+    int _maxOrderAmount;
+    [SerializeField]
+    float _minOrderTime;
+    [SerializeField]
+    float _maxOrderTime;
+    [SerializeField]
+    int _incrementOneAllAtTime;
+    [SerializeField]
+    int _timeToIncreaseNumOrders;
+    [SerializeField]
+    int _startOrdersAmount;
+
     [Header("Lifes")]
     [SerializeField]
     int _totalLifes;
@@ -61,6 +77,20 @@ public class GameManager : Singleton<GameManager>
         Debug.Log("GameFinished");
     }
 
+    public void GetOrderProperties(out int amount, out EDoneness doneness, out float duration)
+    {
+        doneness = (EDoneness)UnityEngine.Random.Range(1, 4);
+
+        int incrementByTime = Mathf.FloorToInt( Time.timeSinceLevelLoad / _incrementOneAllAtTime);
+        amount = UnityEngine.Random.Range(_minOrderAmount + incrementByTime, _maxOrderAmount + incrementByTime);
+        duration = UnityEngine.Random.Range(_minOrderTime, _maxOrderTime);
+    }
+
+    public int GetOrderAmount()
+    {
+        return _startOrdersAmount + Mathf.FloorToInt(Time.timeSinceLevelLoad / _timeToIncreaseNumOrders);
+    }
+
     public float GetIncrementValue(EspetoController espeto)
     {
         float currentDistance = _dropAreaTopPos - espeto.transform.position.y;
@@ -74,12 +104,8 @@ public class GameManager : Singleton<GameManager>
         return (EDoneness)Mathf.RoundToInt(donenessValue);
     }
 
-    public Sprite GetImage(float donenessValue)
-    {
-        return GetImage(GetDoneness(donenessValue));
-    }
 
-    internal void SetAllEspetoRayCast(bool enable)
+    public void SetAllEspetoRayCast(bool enable)
     {
         var list = GameObject.FindObjectsOfType<EspetoController>();
         for (int i = list.Length - 1; i >= 0; --i)
@@ -88,13 +114,18 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    public Sprite GetImage(EDoneness doneness)
+    public Color GetImage(float donenessValue)
+    {
+        return GetImage(GetDoneness(donenessValue));
+    }
+
+    public Color GetImage(EDoneness doneness)
     {
         for (int i = _donenessValues.Count - 1; i >= 0; --i)
         {
             if (_donenessValues[i].doneness == doneness)
             {
-                return _donenessValues[i].sprite;
+                return _donenessValues[i].color;
             }
         }
         Debug.LogWarning("No sprite found");
@@ -106,5 +137,5 @@ public class GameManager : Singleton<GameManager>
 public class DonenessInfo
 {
     public EDoneness doneness;
-    public Sprite sprite;
+    public Color color;
 }

@@ -10,10 +10,6 @@ public class EspetoController : MonoBehaviour, IBeginDragHandler, IEndDragHandle
     public const int MaxSort = 1080;
     public const string KeyDropArea = "DropArea";
 
-    [Header("Image")]
-    [SerializeField]
-    Image _image;
-
     [Header("GUI Offset")]
     [SerializeField]
     Vector2 _offset;
@@ -77,7 +73,7 @@ public class EspetoController : MonoBehaviour, IBeginDragHandler, IEndDragHandle
         _donenessIncrement = GameManager.Instance.GetIncrementValue(this);
     }
 
-    void FinishPlaceInOrder(GUIOrderController orderController)
+    void FinishPlaceInOrder(GUIOrderControllerElement orderController)
     {
         _finished = true;
         orderController.AddEspeto(this);
@@ -93,7 +89,8 @@ public class EspetoController : MonoBehaviour, IBeginDragHandler, IEndDragHandle
 
     void FinishWasted()
     {
-
+        Debug.Log("Wasted");
+        Destroy(gameObject);
     }
 
     void Update()
@@ -114,11 +111,23 @@ public class EspetoController : MonoBehaviour, IBeginDragHandler, IEndDragHandle
     {
         _doneness = newDoneness;
 
-        _image.sprite = _gameManager.GetImage(_doneness);
+        SetColor(_gameManager.GetImage(_doneness));
 
-        if(_doneness == EDoneness.Size)
+        if (_doneness == EDoneness.Size)
         {
             FinishWasted();
+        }
+    }
+
+    void SetColor(Color color)
+    {
+        var allImages = GetComponentsInChildren<Image>();
+        for (int i = 0; i < allImages.Length; ++i)
+        {
+            if (allImages[i].name != "Stick")
+            {
+                allImages[i].color = color;
+            }
         }
     }
 
@@ -128,7 +137,7 @@ public class EspetoController : MonoBehaviour, IBeginDragHandler, IEndDragHandle
     public void OnBeginDrag(PointerEventData eventData)
     {
         GameManager.Instance.SetAllEspetoRayCast(false);
-    
+
         _originalPosition = transform.position;
     }
 
@@ -138,16 +147,16 @@ public class EspetoController : MonoBehaviour, IBeginDragHandler, IEndDragHandle
     }
     public void OnEndDrag(PointerEventData eventData)
     {
-        GUIOrderController orderController = null;
+        GUIOrderControllerElement orderController = null;
         if (eventData.pointerEnter != null)
-            orderController = eventData.pointerEnter.GetComponent<GUIOrderController>();
+            orderController = eventData.pointerEnter.GetComponent<GUIOrderControllerElement>();
 
         GUITrashController trashController = null;
         if (eventData.pointerEnter != null && orderController == null)
             trashController = eventData.pointerEnter.GetComponent<GUITrashController>();
 
         if (eventData.pointerEnter.name == KeyDropArea ||
-            trashController != null||
+            trashController != null ||
              orderController != null)
         {
             if (orderController != null)

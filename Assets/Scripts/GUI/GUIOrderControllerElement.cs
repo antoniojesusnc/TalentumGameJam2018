@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GUIOrderController : MonoBehaviour
+public class GUIOrderControllerElement : MonoBehaviour
 {
     [Header("Control vars")]
     public int _amount;
@@ -22,10 +22,11 @@ public class GUIOrderController : MonoBehaviour
     float _timeStamp;
     bool _starting;
     bool _finish;
+    public bool Disable { get; set; }
 
     private void Awake()
     {
-        SetProperties(_amount, _doneness, _duration);
+        
     }
 
     public void SetProperties(int amount, EDoneness doneness, float duration)
@@ -36,6 +37,11 @@ public class GUIOrderController : MonoBehaviour
         _timeStamp = _duration;
 
         UpdateGUI();
+    }
+
+    internal void StartAnim()
+    {
+        Disable = false;
     }
 
     public void AddEspeto(EspetoController espeto)
@@ -63,7 +69,7 @@ public class GUIOrderController : MonoBehaviour
 
     private void Update()
     {
-        if (_starting || _finish)
+        if (Disable || _starting || _finish)
             return;
 
         _timeStamp -= Time.deltaTime;
@@ -82,7 +88,7 @@ public class GUIOrderController : MonoBehaviour
     private void UpdateGUI()
     {
         _amountText.text = _amount.ToString();
-        _image.sprite = GameManager.Instance.GetImage(_doneness);
+        _image.color = GameManager.Instance.GetImage(_doneness);
 
         UpdateGUIBar();
     }
@@ -93,7 +99,6 @@ public class GUIOrderController : MonoBehaviour
         _finish = true;
 
         GameManager.Instance.TakeLife();
-
     }
 
     void FinishEspeto()
