@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class GUIFoodTracker : MonoBehaviour, IBeginDragHandler , IEndDragHandler, IDragHandler
+public class GUIFoodTracker : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
 
     public Transform _espetoParent;
@@ -26,7 +26,8 @@ public class GUIFoodTracker : MonoBehaviour, IBeginDragHandler , IEndDragHandler
     public void OnEndDrag(PointerEventData eventData)
     {
         _dropArea.alpha = 0;
-        if (eventData.pointerEnter.name == EspetoController.KeyDropArea)
+        if (eventData.pointerEnter != null &&
+        eventData.pointerEnter.name == EspetoController.KeyDropArea)
         {
             _movingEspeto.Setted();
         }

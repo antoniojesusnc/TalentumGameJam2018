@@ -11,7 +11,7 @@ public class GUIScoreController : MonoBehaviour
 
     void Start()
     {
-        OnChangePoints(5);
+        OnChangePoints(0);
         GameManager.Instance.OnChangePoints += OnChangePoints;
     }
 
