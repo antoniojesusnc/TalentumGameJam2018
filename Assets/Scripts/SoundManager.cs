@@ -24,20 +24,20 @@ public class SoundManager : Singleton<SoundManager> {
 		
 	}
 
-    private void PlayBaseMusic()
+    public void PlayBaseMusic()
     {
         currentMusic.Stop();
         currentMusic = baseMusic;
         currentMusic.Play();
     }
 
-    private void PlayDefeat(){
+    public void PlayDefeat(){
         currentMusic.Stop();
         currentMusic = failureMusic;
         currentMusic.Play();
     }
 
-    private void OneLifeLeft(){
+    public void OneLifeLeft(){
         currentMusic.Stop();
         fireSFXLoop.Stop();
         currentMusic = oneLifeLeftMusic;

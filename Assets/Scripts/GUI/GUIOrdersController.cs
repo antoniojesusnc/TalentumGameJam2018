@@ -51,6 +51,8 @@ public class GUIOrdersController : MonoBehaviour
         GameManager.Instance.GetOrderProperties(out amount, out doneness, out duration);
         _orders[index].SetProperties(amount, doneness, duration);
         _orders[index].StartAnim();
+
+        SFXManager.Instance.playRingOrder();
     }
 
     void CheckIncreaseNumOrders()
