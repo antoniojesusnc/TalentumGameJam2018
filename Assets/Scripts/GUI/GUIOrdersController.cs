@@ -60,6 +60,7 @@ public class GUIOrdersController : MonoBehaviour
         {
             _currentOrderAmounts = newOrderAmount;
             _orders[_currentOrderAmounts - 1].Disable = false;
+            StartOrder(_currentOrderAmounts - 1);
         }
 
         if (_currentOrderAmounts == _orders.Count)
