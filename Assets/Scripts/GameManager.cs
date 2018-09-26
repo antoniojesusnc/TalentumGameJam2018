@@ -6,6 +6,18 @@ using UnityEngine.UI;
 
 public class GameManager : Singleton<GameManager>
 {
+    [Header("Lifes")]
+    [SerializeField]
+    int _totalLifes;
+
+    int _currentLifes;
+    public int Lifes
+    {
+        get
+        {
+            return _currentLifes;
+        }
+    }
 
     [Header("Doneness Values")]
     [SerializeField]
@@ -21,19 +33,40 @@ public class GameManager : Singleton<GameManager>
     RectTransform _dropArea;
     float _dropAreaTopPos;
 
+
+    public delegate void DelegateOnUpdateLifes(int currentLifes);
+    public event DelegateOnUpdateLifes OnUpdateLifes;
+
     // Use this for initialization
     void Start()
     {
         _dropAreaTopPos = _dropArea.transform.position.y - 0.5f * _dropArea.sizeDelta.y * _dropArea.lossyScale.y;
+        _currentLifes = _totalLifes;
     }
 
+    public void TakeLife()
+    {
+        --_currentLifes;
+        if(_currentLifes <= 0)
+        {
+            FinishGame();
+        }
+
+        if (OnUpdateLifes != null)
+            OnUpdateLifes(_currentLifes);
+    }
+
+    private void FinishGame()
+    {
+        Debug.Log("GameFinished");
+    }
 
     public float GetIncrementValue(EspetoController espeto)
     {
         float currentDistance = _dropAreaTopPos - espeto.transform.position.y;
         float maxDistance = -_dropArea.sizeDelta.y;
 
-        return Mathf.Lerp(_farValue, _closeValue, currentDistance / maxDistance);
+        return Mathf.Lerp(_closeValue, _farValue, currentDistance / maxDistance);
     }
 
     public EDoneness GetDoneness(float donenessValue)
