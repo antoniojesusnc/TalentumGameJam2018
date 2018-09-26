@@ -161,9 +161,10 @@ public class EspetoController : MonoBehaviour, IBeginDragHandler, IEndDragHandle
         if (eventData.pointerEnter != null && orderController == null)
             trashController = eventData.pointerEnter.GetComponent<GUITrashController>();
 
-        if (eventData.pointerEnter.name == KeyDropArea ||
+        if (eventData.pointerEnter != null &&
+            (eventData.pointerEnter.name == KeyDropArea ||
             trashController != null ||
-             orderController != null)
+             orderController != null))
         {
             if (orderController != null)
             {
@@ -180,6 +181,7 @@ public class EspetoController : MonoBehaviour, IBeginDragHandler, IEndDragHandle
             transform.position = _originalPosition;
         }
         Setted();
+
     }
 
 

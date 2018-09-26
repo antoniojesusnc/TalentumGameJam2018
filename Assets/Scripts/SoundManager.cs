@@ -13,7 +13,7 @@ public class SoundManager : Singleton<SoundManager> {
     // Use this for initialization
     void Awake ()
     {
-        currentMusic = oneLifeLeftMusic;
+        currentMusic = baseMusic;
         currentMusic.Play();
         fireSFXLoop.Play();
 	}

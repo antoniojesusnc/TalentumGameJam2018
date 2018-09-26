@@ -109,7 +109,7 @@ public class GameManager : Singleton<GameManager>
             OnUpdateLifes(_currentLifes);
 
             if (_currentLifes == 1)
-                SoundManager.Instance.PlayBaseMusic();
+                SoundManager.Instance.OneLifeLeft();
         }
             
     }

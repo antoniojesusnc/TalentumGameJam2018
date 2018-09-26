@@ -35,6 +35,7 @@ public class GUIFoodTracker : MonoBehaviour, IBeginDragHandler, IEndDragHandler,
         else
         {
             Debug.Log("BadPosition");
+            GameManager.Instance.SetAllEspetoRayCast(true);
             Destroy(_movingEspeto.gameObject);
         }
     }
