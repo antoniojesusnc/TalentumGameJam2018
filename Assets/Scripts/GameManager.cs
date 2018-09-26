@@ -22,6 +22,11 @@ public class GameManager : Singleton<GameManager>
     [SerializeField]
     int _startOrdersAmount;
 
+    [SerializeField]
+    float _minOrderDelayTime;
+    [SerializeField]
+    float _maxOrderDelayTime;
+
     [Header("Lifes")]
     [SerializeField]
     int _totalLifes;
@@ -89,6 +94,11 @@ public class GameManager : Singleton<GameManager>
     public int GetOrderAmount()
     {
         return _startOrdersAmount + Mathf.FloorToInt(Time.timeSinceLevelLoad / _timeToIncreaseNumOrders);
+    }
+
+    public float GetOrderDelayTime()
+    {
+        return UnityEngine.Random.Range(_minOrderDelayTime, _maxOrderDelayTime);
     }
 
     public float GetIncrementValue(EspetoController espeto)

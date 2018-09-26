@@ -42,6 +42,7 @@ public class GUIOrderControllerElement : MonoBehaviour
     internal void StartAnim()
     {
         Disable = false;
+        gameObject.SetActive(true);
     }
 
     public void AddEspeto(EspetoController espeto)
@@ -99,11 +100,17 @@ public class GUIOrderControllerElement : MonoBehaviour
         _finish = true;
 
         GameManager.Instance.TakeLife();
+        gameObject.SetActive(false);
+
+        GetComponent<GUIOrdersController>().FinishOrder(this);
     }
 
     void FinishEspeto()
     {
         _finish = true;
         Debug.Log("OrderController FinishEspeto");
+        gameObject.SetActive(false);
+
+        GetComponent<GUIOrdersController>().FinishOrder(this);
     }
 }
