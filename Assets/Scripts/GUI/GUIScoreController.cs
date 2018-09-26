@@ -17,7 +17,7 @@ public class GUIScoreController : MonoBehaviour
 
     private void OnChangePoints(int currentPoints)
     {
-        _text.text = currentPoints.ToString("0000000");
+        _text.text = currentPoints.ToString("000000");
     }
 
 
