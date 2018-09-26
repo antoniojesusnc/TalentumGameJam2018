@@ -85,6 +85,8 @@ public class EspetoController : MonoBehaviour, IBeginDragHandler, IEndDragHandle
         _finished = true;
         trash.AddEspeto(this);
         Destroy(gameObject);
+
+        SFXManager.Instance.PlayCookWasted();
     }
 
     void FinishWasted()
@@ -113,9 +115,12 @@ public class EspetoController : MonoBehaviour, IBeginDragHandler, IEndDragHandle
 
         SetColor(_gameManager.GetImage(_doneness));
 
+        SFXManager.Instance.PlayCookPlus();
+
         if (_doneness == EDoneness.Size)
         {
             FinishWasted();
+            SFXManager.Instance.PlayCookWasted();
         }
     }
 

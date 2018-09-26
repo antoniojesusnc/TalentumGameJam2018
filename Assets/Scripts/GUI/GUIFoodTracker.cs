@@ -25,6 +25,7 @@ public class GUIFoodTracker : MonoBehaviour, IBeginDragHandler, IEndDragHandler,
     }
     public void OnEndDrag(PointerEventData eventData)
     {
+        SFXManager.Instance.PlayDragDrop();
         _dropArea.alpha = 0;
         if (eventData.pointerEnter != null &&
         eventData.pointerEnter.name == EspetoController.KeyDropArea)
@@ -40,6 +41,7 @@ public class GUIFoodTracker : MonoBehaviour, IBeginDragHandler, IEndDragHandler,
 
     public void OnDrag(PointerEventData eventData)
     {
+        
         _movingEspeto.transform.position = eventData.position + _movingEspeto.Offset;
     }
 

@@ -21,27 +21,27 @@ public class SFXManager : Singleton<SFXManager>
 		
 	}
 
-    void PlayCookPlus()
+    public void PlayCookPlus()
     {
         espetoCookPlus.Play();
     }
 
-    void PlayCookWasted()
+    public void PlayCookWasted()
     {
         espetoCookWasted.Play();
     }
 
-    void PlayDragDrop()
+    public void PlayDragDrop()
     {
         espetoDragDrop.Play();
     }
 
-    void playRingOrder()
+    public void playRingOrder()
     {
         ringOrder.Play();
     }
 
-    void PlayRingOrderLost()
+    public void PlayRingOrderLost()
     {
         ringOrderLost.Play();
     }

@@ -100,11 +100,18 @@ public class GameManager : Singleton<GameManager>
         --_currentLifes;
         if(_currentLifes <= 0)
         {
+            SoundManager.Instance.PlayDefeat();
             FinishGame();
         }
 
         if (OnUpdateLifes != null)
+        {
             OnUpdateLifes(_currentLifes);
+
+            if (_currentLifes == 1)
+                SoundManager.Instance.PlayBaseMusic();
+        }
+            
     }
 
     private void FinishGame()

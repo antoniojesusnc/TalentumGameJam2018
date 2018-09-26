@@ -113,6 +113,8 @@ public class GUIOrderControllerElement : MonoBehaviour
         gameObject.SetActive(false);
 
         _gUIOrdersController.FinishOrder(this);
+
+        SFXManager.Instance.PlayRingOrderLost();
     }
 
     void FinishEspeto()
@@ -123,5 +125,7 @@ public class GUIOrderControllerElement : MonoBehaviour
 
         _gUIOrdersController.FinishOrder(this);
         GameManager.Instance.AddPoints();
+
+        SFXManager.Instance.PlayRingOrderLost();
     }
 }
