@@ -73,11 +73,19 @@ public class EspetoController : MonoBehaviour, IBeginDragHandler, IEndDragHandle
         _donenessIncrement = GameManager.Instance.GetIncrementValue(this);
     }
 
-    void FinishPlaceInOrder(GUIOrderControllerElement orderController)
+    bool FinishPlaceInOrder(GUIOrderControllerElement orderController)
     {
-        _finished = true;
-        orderController.AddEspeto(this);
-        Destroy(gameObject);
+        if (orderController.AddEspeto(this))
+        {
+            _finished = true;
+            Destroy(gameObject);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
     }
 
     void FinishThrowToTrash(GUITrashController trash)
@@ -168,7 +176,8 @@ public class EspetoController : MonoBehaviour, IBeginDragHandler, IEndDragHandle
         {
             if (orderController != null)
             {
-                FinishPlaceInOrder(orderController);
+                if (!FinishPlaceInOrder(orderController))
+                    transform.position = _originalPosition;
             }
             else if (trashController != null)
             {

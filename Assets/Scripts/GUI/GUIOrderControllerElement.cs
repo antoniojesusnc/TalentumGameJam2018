@@ -55,10 +55,10 @@ public class GUIOrderControllerElement : MonoBehaviour
         gameObject.SetActive(true);
     }
 
-    public void AddEspeto(EspetoController espeto)
+    public bool AddEspeto(EspetoController espeto)
     {
         if (_amount <= 0)
-            return;
+            return false;
 
         if (espeto.Doneness == _doneness)
         {
@@ -71,10 +71,12 @@ public class GUIOrderControllerElement : MonoBehaviour
             {
                 UpdateGUI();
             }
+            return true;
         }
         else
         {
             Debug.Log("OrderController Bad Espeto");
+            return false;
         }
     }
 

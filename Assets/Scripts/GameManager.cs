@@ -72,19 +72,37 @@ public class GameManager : Singleton<GameManager>
     int _pointsPerTable;
     int _currentPoints;
     int _bestPoints;
+    public int HighScore
+    {
+        get
+        {
+            return _bestPoints;
+        }
+    }
 
+
+    [Header("Drop Area")]
+    [SerializeField]
+    List<CanvasGroup> _dropAreas;
 
     public delegate void DelegateOnUpdateLifes(int currentLifes);
     public event DelegateOnUpdateLifes OnUpdateLifes;
 
     public delegate void DelegateChangePoints(int currentPoints);
     public event DelegateChangePoints OnChangePoints;
+    public event DelegateChangePoints OnChangeHighScorePoints;
 
     // Use this for initialization
     void Start()
     {
         _dropAreaTopPos = _dropArea.transform.position.y - 0.5f * _dropArea.sizeDelta.y * _dropArea.lossyScale.y;
         _currentLifes = _totalLifes;
+
+        _bestPoints = PlayerPrefs.GetInt("Score", 0);
+        if (OnChangeHighScorePoints != null)
+        {
+            OnChangeHighScorePoints(_bestPoints);
+        }
     }
 
 
@@ -93,12 +111,19 @@ public class GameManager : Singleton<GameManager>
         _currentPoints += GetOrderAmount() * _pointsPerTable;
         if (OnChangePoints != null)
             OnChangePoints(_currentPoints);
+
+        if (_currentPoints > _bestPoints)
+        {
+            _bestPoints = _currentPoints;
+            OnChangeHighScorePoints(_bestPoints);
+            PlayerPrefs.SetInt("Score", _bestPoints);
+        }
     }
 
     public void TakeLife()
     {
         --_currentLifes;
-        if(_currentLifes <= 0)
+        if (_currentLifes <= 0)
         {
             SoundManager.Instance.PlayDefeat();
             FinishGame();
@@ -111,7 +136,7 @@ public class GameManager : Singleton<GameManager>
             if (_currentLifes == 1)
                 SoundManager.Instance.OneLifeLeft();
         }
-            
+
     }
 
     private void FinishGame()
@@ -123,7 +148,7 @@ public class GameManager : Singleton<GameManager>
     {
         doneness = (EDoneness)UnityEngine.Random.Range(1, 6);
 
-        int incrementByTime = Mathf.FloorToInt( Time.timeSinceLevelLoad / _incrementOneAllAtTime);
+        int incrementByTime = Mathf.FloorToInt(Time.timeSinceLevelLoad / _incrementOneAllAtTime);
         amount = UnityEngine.Random.Range(_minOrderAmount + incrementByTime, _maxOrderAmount + incrementByTime);
         duration = UnityEngine.Random.Range(_minOrderTime, _maxOrderTime);
     }
@@ -154,12 +179,18 @@ public class GameManager : Singleton<GameManager>
 
     public void SetAllEspetoRayCast(bool enable)
     {
-        DropAreaCanvas.alpha = enable?0:_alphaWhenDragging;
+        DropAreaCanvas.alpha = enable ? 0 : _alphaWhenDragging;
 
         var list = GameObject.FindObjectsOfType<EspetoController>();
         for (int i = list.Length - 1; i >= 0; --i)
         {
             list[i].GetComponent<GraphicRaycaster>().enabled = enable;
+        }
+
+        for (int j = _dropAreas.Count - 1; j >= 0; --j)
+        {
+            _dropAreas[j].alpha = enable ? 0 : 0.6f;
+
         }
     }
 
